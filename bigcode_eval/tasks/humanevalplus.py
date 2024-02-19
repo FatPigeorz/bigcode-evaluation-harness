@@ -39,24 +39,28 @@ class GeneralHumanEvalPlus(GeneralHumanEval):
         super().__init__(strip_prompt, k, num_workers, timeout)
         
         if prompt_method == 'instruct':
-            prompt_prefix = "Please solve the programming task below efficiently by writing a fast implementation:\n"
+            prompt_suffix = " " * 4 + "# Please solve the programming task below efficiently by writing a fast implementation:\n"
         elif prompt_method == 'CoT':
-            prompt_prefix = "Think step by step. Please solve the programming task below efficiently by writing a fast implementation:\n"
+            prompt_suffix = " " * 4 + "# Think step by step. Please solve the programming task below efficiently by writing a fast implementation:\n"
         else:
-            prompt_prefix = ""
+            prompt_suffix = ""
         
         print(f"Using prompt method: {prompt_method}")
-        print(f"Using prompt prefix: {prompt_prefix}")
+        print(f"Using prompt prompt_suffix: {prompt_suffix}")
 
         def map_dataset(example):
-            example["prompt"] = prompt_prefix + example["prompt"]
+            example["prompt"] = example["prompt"] + "\n" + prompt_suffix
 
         # add prompt prefix
+        from datasets import disable_caching
+        disable_caching()
         self.dataset = self.dataset.map(map_dataset)
+        print(self.dataset[0])
 
 def create_task(strip_prompt):
     class HumanEvalPlus(GeneralHumanEvalPlus):
-        def __init__(self, **kwargs):
+        def __init__(self, prompt_method, **kwargs):
+            kwargs["prompt_method"] = prompt_method
             super().__init__(strip_prompt, **kwargs)
 
     return HumanEvalPlus

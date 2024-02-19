@@ -254,6 +254,7 @@ def main():
         # here we don't generate code but only evaluate previously computed generations
         if accelerator.is_main_process:
             print("evaluation only mode")
+        print(f"Args: {args}")
         evaluator = Evaluator(accelerator, None, None, args)
         for task in task_names:
             results[task] = evaluator.evaluate(task)
