@@ -55,7 +55,7 @@ class GeneralHumanEvalPlus(GeneralHumanEval):
         from datasets import disable_caching
         disable_caching()
         self.dataset = self.dataset.map(map_dataset)
-        print(self.dataset[0])
+        print(self.dataset["test"][0]["prompt"])
 
 def create_task(strip_prompt):
     class HumanEvalPlus(GeneralHumanEvalPlus):
