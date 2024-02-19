@@ -40,6 +40,8 @@ def get_task(task_name, args=None):
             kwargs["prompt"] = args.prompt
         if "load_data_path" in inspect.signature(TASK_REGISTRY[task_name]).parameters:
             kwargs["load_data_path"] = args.load_data_path
+        if "prompt_method" in inspect.signature(TASK_REGISTRY[task_name]).parameters:
+            kwargs["prompt_method"] = args.prompt_method
         return TASK_REGISTRY[task_name](**kwargs)
     except KeyError:
         print("Available tasks:")

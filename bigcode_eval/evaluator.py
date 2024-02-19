@@ -88,6 +88,7 @@ class Evaluator:
         return generations, references
 
     def evaluate(self, task_name, intermediate_generations=None):
+        print(f"Args: {self.args}")
         task = tasks.get_task(task_name, self.args)
         if task.requires_execution and not self.allow_code_execution:
             raise ValueError(_WARNING)
