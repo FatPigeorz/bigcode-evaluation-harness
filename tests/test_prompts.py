@@ -1,6 +1,7 @@
 import json
 
 from bigcode_eval import tasks
+from bigcode_eval.tasks.humanevalplus import GeneralHumanEvalPlus
 
 TASKS = ["pal-gsm8k-greedy"]
 
@@ -19,3 +20,9 @@ def test_gsm_prompt():
         task_prompt = task.get_prompt(sample_doc[task_name])
         ref_prompt = load_reference_prompt(task_name)
         assert task_prompt == ref_prompt
+        print(task_prompt)
+
+
+task: GeneralHumanEvalPlus = tasks.get_task("humanevalplus")
+task_prompt = task.get_prompt(task.dataset["test"][0])
+print(task_prompt)

@@ -50,6 +50,7 @@ class GeneralHumanEvalPlus(GeneralHumanEval):
 
         def map_dataset(example):
             example["prompt"] = example["prompt"] + "\n" + prompt_suffix
+            return example
 
         # add prompt prefix
         from datasets import disable_caching
