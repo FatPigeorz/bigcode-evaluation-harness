@@ -210,6 +210,12 @@ def parse_args():
         action="store_true",
         help="Don't run generation but benchmark groundtruth (useful for debugging)",
     )
+    parser.add_argument(
+        "--prompt-method",
+        type=str,
+        choices=["basic", "instruct", "CoT"],
+        default="basic",
+    )
     return parser.parse_args()
 
 

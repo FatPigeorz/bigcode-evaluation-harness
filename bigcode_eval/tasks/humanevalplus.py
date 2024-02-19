@@ -29,14 +29,30 @@ class GeneralHumanEvalPlus(GeneralHumanEval):
 
     DATASET_PATH = "evalplus/humanevalplus"
 
-    def __init__(self, strip_prompt, k=[1, 10, 100], num_workers=16, timeout=10.0):
+    def __init__(self, strip_prompt, k=[1, 10, 100], num_workers=16, timeout=10.0, prompt_method='basic'):
         if timeout < 10.0:
             warn(
                 "It is suggested to have a longer timeout as HumanEval+ has lots of tests. "
                 f"The current timeout is {timeout}s while the suggested timeout is 10s."
             )
+        
         super().__init__(strip_prompt, k, num_workers, timeout)
+        
+        if prompt_method == 'instruct':
+            prompt_prefix = "Please solve the programming task below efficiently by writing a fast implementation:\n"
+        elif prompt_method == 'CoT':
+            prompt_prefix = "Think step by step. Please solve the programming task below efficiently by writing a fast implementation:\n"
+        else:
+            prompt_prefix = ""
+        
+        print(f"Using prompt method: {prompt_method}")
+        print(f"Using prompt prefix: {prompt_prefix}")
 
+        def map_dataset(example):
+            example["prompt"] = prompt_prefix + example["prompt"]
+
+        # add prompt prefix
+        self.dataset = self.dataset.map(map_dataset)
 
 def create_task(strip_prompt):
     class HumanEvalPlus(GeneralHumanEvalPlus):
