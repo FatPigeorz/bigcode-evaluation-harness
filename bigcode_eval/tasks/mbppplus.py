@@ -52,6 +52,11 @@ class MBPPPlus(MBPP):
         else:
             prompt_prefix = ""
         prompt = prompt_prefix + prompt
+        if os.getenv("MBBPPLUS_DEBUG", "0") == "0":
+            print(f"Using prompt method: {self.prompt_method}")
+            print(f"Using prompt prompt_prefix: {prompt_prefix}")
+            print(f"Prompt: {prompt}")
+            os.environ["MBBPPLUS_DEBUG"] = "1"
         return prompt
 
     # NOTE(@ganler): MBPP+ extends the original MBPP jsonl data with a "test" field which
