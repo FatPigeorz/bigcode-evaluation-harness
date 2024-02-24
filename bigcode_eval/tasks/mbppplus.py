@@ -33,6 +33,10 @@ class MBPPPlus(MBPP):
 
     DATASET_PATH = "evalplus/mbppplus"
 
+    def __init__(self, prompt_method="basic"):
+        super().__init__()
+        self.prompt_method = prompt_method
+
     def get_prompt(self, doc):
         """Builds the prompt for the LM to generate from.
         MBPP prompt is built following to InCoder (Fried et al.) approach
@@ -41,6 +45,13 @@ class MBPPPlus(MBPP):
         description = doc["prompt"]  # sanitized testset use "prompt" instead of "text"
         test_example = doc["test_list"][0]
         prompt = f'"""\n{description}\n{test_example}\n"""\n'
+        if self.prompt_method == 'instruct':
+            prompt_prefix = "# Please solve the programming task below efficiently by writing a fast implementation\n"
+        elif self.prompt_method == 'CoT':
+            prompt_prefix = "# Think step by step. Please solve the programming task below efficiently by writing a fast implementation\n"
+        else:
+            prompt_prefix = ""
+        prompt = prompt_prefix + prompt
         return prompt
 
     # NOTE(@ganler): MBPP+ extends the original MBPP jsonl data with a "test" field which
